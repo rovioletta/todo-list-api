@@ -5,11 +5,11 @@ import (
 	"net"
 	"os"
 
-	"rovioletta/todo-list-api/pkg/pb/user"
-	user_srv "rovioletta/todo-list-api/internal/app/user"
-
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	database "rovioletta/todo-list-api/internal/db"
+	user_srv "rovioletta/todo-list-api/internal/service/user"
+	"rovioletta/todo-list-api/pkg/pb/user"
 )
 
 func main() {
@@ -24,7 +24,10 @@ func main() {
 		logger.Error("Error loading .env file", slog.String("error", err.Error()))
 		return
 	}
-	
+
+	db := database.NewDB(logger)
+	defer db.CloseDB()
+
 	conn, err := net.Listen("tcp", os.Getenv("APP_ADDRESS"))
 	if err != nil {
 		logger.Error("Failed to run the server", slog.String("error", err.Error()))
@@ -33,6 +36,6 @@ func main() {
 	var opts []grpc.ServerOption
 
 	grpcServer := grpc.NewServer(opts...)
-	user.RegisterAuthServiceServer(grpcServer, user_srv.NewUserService())
+	user.RegisterAuthServiceServer(grpcServer, user_srv.NewUserService(db))
 	grpcServer.Serve(conn)
 }
