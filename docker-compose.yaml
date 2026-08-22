@@ -1,5 +1,5 @@
 services:
-  todo-list--api:
+  todo-list-api:
     image: todo-list-api
     build: .
     ports:
@@ -34,7 +34,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8081:8081
 
 volumes:
   postgres_data:
