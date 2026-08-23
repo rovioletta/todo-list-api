@@ -6,6 +6,6 @@ import (
 	pb "rovioletta/todo-list-api/pkg/pb/user"
 )
 
-func (*UserService) Login(context.Context, *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (*Implementation) Login(context.Context, *pb.LoginRequest) (*pb.LoginResponse, error) {
 	return nil, nil
 }

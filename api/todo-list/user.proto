@@ -6,29 +6,29 @@ option go_package = "user/pkg/pb;user";
 
 import "buf/validate/validate.proto";
 
-service AuthService {
-  rpc Register (RegisterRequest) returns (RegisterResponse);
-  rpc Login (LoginRequest) returns (LoginResponse);
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
 }
 
 message RegisterRequest {
-  string email = 1[(buf.validate.field).string = {
-    email: true,
+  string login = 1 [(buf.validate.field).string = {
+    pattern: "^[a-zA-Z0-9_-]+$"
     min_len: 5,
     max_len: 32
   }];
-  string password = 2[(buf.validate.field).string = {
+  string password = 2 [(buf.validate.field).string = {
     min_len: 8,
     max_len: 72
   }];
 }
 
 message RegisterResponse {
-  string user_id = 1;
+  uint64 user_id = 1;
 }
 
 message LoginRequest {
-  string email = 1;
+  string login = 1;
   string password = 2;
 }
 

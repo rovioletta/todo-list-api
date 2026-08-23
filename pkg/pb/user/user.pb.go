@@ -24,7 +24,7 @@ const (
 
 type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Login         string                 `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -60,9 +60,9 @@ func (*RegisterRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *RegisterRequest) GetEmail() string {
+func (x *RegisterRequest) GetLogin() string {
 	if x != nil {
-		return x.Email
+		return x.Login
 	}
 	return ""
 }
@@ -76,7 +76,7 @@ func (x *RegisterRequest) GetPassword() string {
 
 type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,16 +111,16 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *RegisterResponse) GetUserId() string {
+func (x *RegisterResponse) GetUserId() uint64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Login         string                 `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -156,9 +156,9 @@ func (*LoginRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LoginRequest) GetEmail() string {
+func (x *LoginRequest) GetLogin() string {
 	if x != nil {
-		return x.Email
+		return x.Login
 	}
 	return ""
 }
@@ -219,18 +219,18 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x04user\x1a\x1bbuf/validate/validate.proto\"[\n" +
-	"\x0fRegisterRequest\x12!\n" +
-	"\x05email\x18\x01 \x01(\tB\v\xbaH\br\x06\x10\x05\x18 `\x01R\x05email\x12%\n" +
+	"user.proto\x12\x04user\x1a\x1bbuf/validate/validate.proto\"k\n" +
+	"\x0fRegisterRequest\x121\n" +
+	"\x05login\x18\x01 \x01(\tB\x1b\xbaH\x18r\x16\x10\x05\x18 2\x10^[a-zA-Z0-9_-]+$R\x05login\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\b\x18HR\bpassword\"+\n" +
 	"\x10RegisterResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"@\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\"@\n" +
 	"\fLoginRequest\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
+	"\x05login\x18\x01 \x01(\tR\x05login\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"%\n" +
 	"\rLoginResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token2z\n" +
-	"\vAuthService\x129\n" +
+	"\vUserService\x129\n" +
 	"\bRegister\x12\x15.user.RegisterRequest\x1a\x16.user.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponseB\x12Z\x10user/pkg/pb;userb\x06proto3"
 
@@ -254,10 +254,10 @@ var file_user_proto_goTypes = []any{
 	(*LoginResponse)(nil),    // 3: user.LoginResponse
 }
 var file_user_proto_depIdxs = []int32{
-	0, // 0: user.AuthService.Register:input_type -> user.RegisterRequest
-	2, // 1: user.AuthService.Login:input_type -> user.LoginRequest
-	1, // 2: user.AuthService.Register:output_type -> user.RegisterResponse
-	3, // 3: user.AuthService.Login:output_type -> user.LoginResponse
+	0, // 0: user.UserService.Register:input_type -> user.RegisterRequest
+	2, // 1: user.UserService.Login:input_type -> user.LoginRequest
+	1, // 2: user.UserService.Register:output_type -> user.RegisterResponse
+	3, // 3: user.UserService.Login:output_type -> user.LoginResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
