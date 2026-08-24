@@ -224,10 +224,10 @@ const file_user_proto_rawDesc = "" +
 	"\x05login\x18\x01 \x01(\tB\x1b\xbaH\x18r\x16\x10\x05\x18 2\x10^[a-zA-Z0-9_-]+$R\x05login\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\b\x18HR\bpassword\"+\n" +
 	"\x10RegisterResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x04R\x06userId\"@\n" +
-	"\fLoginRequest\x12\x14\n" +
-	"\x05login\x18\x01 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"%\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\"h\n" +
+	"\fLoginRequest\x121\n" +
+	"\x05login\x18\x01 \x01(\tB\x1b\xbaH\x18r\x16\x10\x05\x18 2\x10^[a-zA-Z0-9_-]+$R\x05login\x12%\n" +
+	"\bpassword\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\b\x18HR\bpassword\"%\n" +
 	"\rLoginResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token2z\n" +
 	"\vUserService\x129\n" +

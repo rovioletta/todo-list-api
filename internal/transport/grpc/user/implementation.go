@@ -10,6 +10,7 @@ import (
 
 type userService interface {
 	CreateUser(ctx context.Context, login, password string) (userID uint64, err error)
+	Login(ctx context.Context, login, password string) (token string, err error)
 }
 
 type Implementation struct {

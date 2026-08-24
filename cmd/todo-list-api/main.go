@@ -14,11 +14,12 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelInfo,
+		Level: slog.LevelDebug,
 	}))
 
 	logger.Info("Starting the Blog app...")
@@ -37,23 +38,38 @@ func main() {
 	// Business logic
 	userService := userSvc.NewService(dbQueries)
 
-	conn, err := net.Listen("tcp", os.Getenv("APP_ADDRESS"))
+	conn, err := net.Listen("tcp", ":"+os.Getenv("APP_PORT"))
 	if err != nil {
 		logger.Error("Failed to run the server", slog.String("error", err.Error()))
 		return
 	}
-	var opts []grpc.ServerOption
 
+	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
+
 	userPb.RegisterUserServiceServer(grpcServer, userGrpc.NewImplementation(logger, userService))
+	reflection.Register(grpcServer)
+
 	grpcServer.Serve(conn)
 }
 
 func initDB(logger *slog.Logger) *pgxpool.Pool {
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
-	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	url := os.Getenv("DATABASE_URL")
+	if url == "" {
+		logger.Error("Database url is not provided")
+		os.Exit(1)
+	}
+
+	ctx := context.Background()
+	dbpool, err := pgxpool.New(ctx, url)
 	if err != nil {
 		logger.Error("Unable to connect to database", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	if err := dbpool.Ping(ctx); err != nil {
+		logger.Error("Unable to ping database", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 
