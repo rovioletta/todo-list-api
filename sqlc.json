@@ -4,7 +4,8 @@
     {
       "engine": "postgresql",
       "schema": [
-        "migrations/01-create-users-table.sql"
+        "migrations/01-create-users-table.sql",
+        "migrations/02-create-tasks-table.sql"
       ],
       "gen": {
         "go": {

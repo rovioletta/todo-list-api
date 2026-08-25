@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package task;
+
+option go_package = "github.com/rovioletta/todo-list/pkg/pb/task;task";
+
+import "buf/validate/validate.proto";
+
+service TaskService {
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+}
+
+message CreateTaskRequest {
+  string title = 1 [(buf.validate.field).string = {
+    min_len: 5,
+    max_len: 32
+  }];
+  string description = 2 [(buf.validate.field).string = {
+    min_len: 1,
+  }];
+}
+
+message CreateTaskResponse {
+  uint64 task_id = 1;
+}

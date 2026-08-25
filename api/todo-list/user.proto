@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "user/pkg/pb;user";
+option go_package = "github.com/rovioletta/todo-list/pkg/pb/user;user";
 
 import "buf/validate/validate.proto";
 

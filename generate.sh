@@ -10,6 +10,7 @@ VENDOR_DIR=".proto-deps"
 
 # Create out folders if not exist
 mkdir -p $OUT_DIR/user
+mkdir -p $OUT_DIR/task
 
 # Install buf/validate dependencies
 if [ ! -d "$VENDOR_DIR/buf/validate" ]; then
@@ -30,6 +31,12 @@ protoc --proto_path=$PROTO_DIR \
        --go_out=$OUT_DIR/user --go_opt=paths=source_relative \
        --go-grpc_out=$OUT_DIR/user --go-grpc_opt=paths=source_relative \
        $PROTO_DIR/user.proto
+
+protoc --proto_path=$PROTO_DIR \
+       --proto_path=$VENDOR_DIR \
+       --go_out=$OUT_DIR/task --go_opt=paths=source_relative \
+       --go-grpc_out=$OUT_DIR/task --go-grpc_opt=paths=source_relative \
+       $PROTO_DIR/task.proto
 
 go mod tidy
 

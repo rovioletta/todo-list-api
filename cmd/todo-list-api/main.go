@@ -10,7 +10,9 @@ import (
 	"rovioletta/todo-list-api/internal/db"
 	"rovioletta/todo-list-api/internal/pkg/tokens"
 	userSvc "rovioletta/todo-list-api/internal/service/user"
+	taskGrpc "rovioletta/todo-list-api/internal/transport/grpc/task"
 	userGrpc "rovioletta/todo-list-api/internal/transport/grpc/user"
+	taskPb "rovioletta/todo-list-api/pkg/pb/task"
 	userPb "rovioletta/todo-list-api/pkg/pb/user"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -41,10 +43,11 @@ func main() {
 	dbQueries := db.NewErrorHandler(db.New(dbpool))
 
 	// Tokens logic
-	tokensManager := tokens.NewJWTManager(os.Getenv("TOKENS_SECRET_KEY"), time.Duration(time.Hour * 12))
+	tokensManager := tokens.NewJWTManager(os.Getenv("TOKENS_SECRET_KEY"), time.Duration(time.Hour*12))
 
-	// Business logic sercice
+	// Business logic service
 	userService := userSvc.NewService(dbQueries, tokensManager)
+	//taskService := taskSvc.NewService()
 
 	// Run server
 	conn, err := net.Listen("tcp", ":"+os.Getenv("APP_PORT"))
@@ -57,6 +60,7 @@ func main() {
 	grpcServer := grpc.NewServer(opts...)
 
 	userPb.RegisterUserServiceServer(grpcServer, userGrpc.NewImplementation(logger, userService))
+	taskPb.RegisterTaskServiceServer(grpcServer, taskGrpc.NewImplementation(logger))
 	reflection.Register(grpcServer)
 
 	grpcServer.Serve(conn)
