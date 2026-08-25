@@ -5,8 +5,10 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"time"
 
 	"rovioletta/todo-list-api/internal/db"
+	"rovioletta/todo-list-api/internal/pkg/tokens"
 	userSvc "rovioletta/todo-list-api/internal/service/user"
 	userGrpc "rovioletta/todo-list-api/internal/transport/grpc/user"
 	userPb "rovioletta/todo-list-api/pkg/pb/user"
@@ -18,26 +20,33 @@ import (
 )
 
 func main() {
+	// Define logger
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelDebug,
 	}))
 
 	logger.Info("Starting the Blog app...")
 
+	// Read environment variables
 	err := godotenv.Load()
 	if err != nil {
 		logger.Error("Error loading .env file", slog.String("error", err.Error()))
 		return
 	}
 
+	// Postgres queries
 	dbpool := initDB(logger)
 	defer dbpool.Close()
 
 	dbQueries := db.New(db.NewErrorHandler(dbpool))
 
-	// Business logic
-	userService := userSvc.NewService(dbQueries)
+	// Tokens logic
+	tokensManager := tokens.NewJWTManager(os.Getenv("TOKENS_SECRET_KEY"), time.Duration(time.Hour * 12))
 
+	// Business logic sercice
+	userService := userSvc.NewService(dbQueries, tokensManager)
+
+	// Run server
 	conn, err := net.Listen("tcp", ":"+os.Getenv("APP_PORT"))
 	if err != nil {
 		logger.Error("Failed to run the server", slog.String("error", err.Error()))

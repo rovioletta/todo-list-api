@@ -13,7 +13,7 @@ func (s *Service) CreateUser(ctx context.Context, login, password string) (userI
 		return userID, fmt.Errorf("hash password: %w", err)
 	}
 
-	userID, err = s.db.CreateUser(ctx, login, hash)
+	userID, err = s.queries.CreateUser(ctx, login, hash)
 	if err != nil {
 		return userID, fmt.Errorf("insert user to db: %w", err)
 	}

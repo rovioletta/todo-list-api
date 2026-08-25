@@ -17,17 +17,17 @@ func NewErrorHandler(db DBTX) *errorHandler {
 	return &errorHandler{db: db}
 }
 
-func (w *errorHandler) Exec(ctx context.Context, query string, params ...interface{}) (pgconn.CommandTag, error) {
+func (w *errorHandler) Exec(ctx context.Context, query string, params ...any) (pgconn.CommandTag, error) {
 	res, err := w.db.Exec(ctx, query, params...)
 	return res, handleError(err)
 }
 
-func (w *errorHandler) Query(ctx context.Context, query string, params ...interface{}) (pgx.Rows, error) {
+func (w *errorHandler) Query(ctx context.Context, query string, params ...any) (pgx.Rows, error) {
 	res, err := w.db.Query(ctx, query, params...)
 	return res, handleError(err)
 }
 
-func (w *errorHandler) QueryRow(ctx context.Context, query string, params ...interface{}) pgx.Row {
+func (w *errorHandler) QueryRow(ctx context.Context, query string, params ...any) pgx.Row {
 	return w.db.QueryRow(ctx, query, params...)
 }
 

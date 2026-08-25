@@ -1,13 +1,30 @@
 package user
 
-import "rovioletta/todo-list-api/internal/db"
+import (
+	"context"
 
-type Service struct {
-	db *db.Queries
+	"rovioletta/todo-list-api/internal/db"
+	"rovioletta/todo-list-api/internal/pkg/tokens"
+)
+
+type queries interface {
+	CreateUser(ctx context.Context, login string, passwordHash string) (userID uint64, err error)
+	GetUserByLogin(ctx context.Context, login string) (user db.GetUserByLoginRow, err error)
 }
 
-func NewService(db *db.Queries) *Service {
+type auth interface {
+	Generate(login string) (token string, err error)
+	Verify(accessToken string) (*tokens.CustomClaims, error)
+}
+
+type Service struct {
+	queries queries
+	auth    auth
+}
+
+func NewService(queries queries, auth auth) *Service {
 	return &Service{
-		db: db,
+		queries: queries,
+		auth:    auth,
 	}
 }

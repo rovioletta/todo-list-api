@@ -11,7 +11,7 @@ import (
 
 const getUserByLogin = `-- name: GetUserByLogin :one
 SELECT login, password_hash FROM users
-WHERE login = $1 :: string
+WHERE login = $1 :: text
 LIMIT 1
 `
 

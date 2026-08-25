@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Service) Login(ctx context.Context, login, password string) (token string, err error) {
-	user, err := s.db.GetUserByLogin(ctx, login)
+	user, err := s.queries.GetUserByLogin(ctx, login)
 	if err != nil {
 		return "", fmt.Errorf("get user from db: %w", err)
 	}
@@ -23,5 +23,10 @@ func (s *Service) Login(ctx context.Context, login, password string) (token stri
 		return "", apperrors.ErrWrongPassword
 	}
 
-	return
+	token, err = s.auth.Generate(login)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate token: %w", err)
+	}
+
+	return token, err
 }
