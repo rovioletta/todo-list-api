@@ -38,7 +38,7 @@ func main() {
 	dbpool := initDB(logger)
 	defer dbpool.Close()
 
-	dbQueries := db.New(db.NewErrorHandler(dbpool))
+	dbQueries := db.NewErrorHandler(db.New(dbpool))
 
 	// Tokens logic
 	tokensManager := tokens.NewJWTManager(os.Getenv("TOKENS_SECRET_KEY"), time.Duration(time.Hour * 12))

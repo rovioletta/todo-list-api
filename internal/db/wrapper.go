@@ -9,26 +9,32 @@ import (
 	"rovioletta/todo-list-api/internal/apperrors"
 )
 
+type queriesInterface interface {
+	CreateUser(ctx context.Context, login string, passwordHash string) (uint64, error)
+	GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error)
+	WithTx(tx pgx.Tx) *Queries
+}
+
 type errorHandler struct {
-	db DBTX
+	queries queriesInterface
 }
 
-func NewErrorHandler(db DBTX) *errorHandler {
-	return &errorHandler{db: db}
+func NewErrorHandler(queries queriesInterface) *errorHandler {
+	return &errorHandler{queries: queries}
 }
 
-func (w *errorHandler) Exec(ctx context.Context, query string, params ...any) (pgconn.CommandTag, error) {
-	res, err := w.db.Exec(ctx, query, params...)
+func (w *errorHandler) CreateUser(ctx context.Context, login string, passwordHash string) (uint64, error) {
+	res, err := w.queries.CreateUser(ctx, login, passwordHash)
 	return res, handleError(err)
 }
 
-func (w *errorHandler) Query(ctx context.Context, query string, params ...any) (pgx.Rows, error) {
-	res, err := w.db.Query(ctx, query, params...)
+func (w *errorHandler) GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error) {
+	res, err := w.queries.GetUserByLogin(ctx, login)
 	return res, handleError(err)
 }
 
-func (w *errorHandler) QueryRow(ctx context.Context, query string, params ...any) pgx.Row {
-	return w.db.QueryRow(ctx, query, params...)
+func (w *errorHandler) WithTx(tx pgx.Tx) *Queries {
+	return w.queries.WithTx(tx)
 }
 
 func handleError(err error) error {
