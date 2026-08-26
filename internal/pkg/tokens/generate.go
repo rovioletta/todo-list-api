@@ -8,7 +8,8 @@ import (
 )
 
 type CustomClaims struct {
-	Login string `json:"login"`
+	UserID uint64 `json:"user_id"`
+	Login  string `json:"login"`
 	jwt.RegisteredClaims
 }
 
@@ -24,8 +25,9 @@ func NewJWTManager(secretKey string, tokenDuration time.Duration) *JWTManager {
 	}
 }
 
-func (m *JWTManager) Generate(login string) (string, error) {
+func (m *JWTManager) Generate(userID uint64, login string) (string, error) {
 	claims := CustomClaims{
+		UserID:    userID,
 		Login:     login,
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(m.tokenDuration)),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),

@@ -12,6 +12,7 @@ import (
 type queriesInterface interface {
 	CreateUser(ctx context.Context, login string, passwordHash string) (uint64, error)
 	GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error)
+	CreateTask(ctx context.Context, arg *CreateTaskParams) (uint64, error)
 	WithTx(tx pgx.Tx) *Queries
 }
 
@@ -30,6 +31,11 @@ func (w *errorHandler) CreateUser(ctx context.Context, login string, passwordHas
 
 func (w *errorHandler) GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error) {
 	res, err := w.queries.GetUserByLogin(ctx, login)
+	return res, handleError(err)
+}
+
+func (w *errorHandler) CreateTask(ctx context.Context, arg *CreateTaskParams) (uint64, error) {
+	res, err := w.queries.CreateTask(ctx, arg)
 	return res, handleError(err)
 }
 

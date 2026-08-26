@@ -23,7 +23,7 @@ func (s *Service) Login(ctx context.Context, login, password string) (token stri
 		return "", apperrors.ErrWrongPassword
 	}
 
-	token, err = s.auth.Generate(login)
+	token, err = s.auth.Generate(user.ID, login)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate token: %w", err)
 	}

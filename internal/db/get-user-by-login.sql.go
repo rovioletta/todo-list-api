@@ -10,12 +10,13 @@ import (
 )
 
 const getUserByLogin = `-- name: GetUserByLogin :one
-SELECT login, password_hash FROM users
+SELECT id, login, password_hash FROM users
 WHERE login = $1 :: text
 LIMIT 1
 `
 
 type GetUserByLoginRow struct {
+	ID           uint64
 	Login        string
 	PasswordHash string
 }
@@ -23,6 +24,6 @@ type GetUserByLoginRow struct {
 func (q *Queries) GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error) {
 	row := q.db.QueryRow(ctx, getUserByLogin, login)
 	var i GetUserByLoginRow
-	err := row.Scan(&i.Login, &i.PasswordHash)
+	err := row.Scan(&i.ID, &i.Login, &i.PasswordHash)
 	return i, err
 }

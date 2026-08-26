@@ -13,7 +13,7 @@ type queries interface {
 }
 
 type auth interface {
-	Generate(login string) (token string, err error)
+	Generate(userID uint64, login string) (token string, err error)
 	Verify(accessToken string) (*tokens.CustomClaims, error)
 }
 

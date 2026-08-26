@@ -9,7 +9,9 @@ import (
 
 	"rovioletta/todo-list-api/internal/db"
 	"rovioletta/todo-list-api/internal/pkg/tokens"
+	taskSvc "rovioletta/todo-list-api/internal/service/task"
 	userSvc "rovioletta/todo-list-api/internal/service/user"
+	"rovioletta/todo-list-api/internal/transport/grpc/interceptors"
 	taskGrpc "rovioletta/todo-list-api/internal/transport/grpc/task"
 	userGrpc "rovioletta/todo-list-api/internal/transport/grpc/user"
 	taskPb "rovioletta/todo-list-api/pkg/pb/task"
@@ -47,7 +49,7 @@ func main() {
 
 	// Business logic service
 	userService := userSvc.NewService(dbQueries, tokensManager)
-	//taskService := taskSvc.NewService()
+	taskService := taskSvc.NewService(dbQueries)
 
 	// Run server
 	conn, err := net.Listen("tcp", ":"+os.Getenv("APP_PORT"))
@@ -56,11 +58,18 @@ func main() {
 		return
 	}
 
-	var opts []grpc.ServerOption
-	grpcServer := grpc.NewServer(opts...)
+	authInterceptor := interceptors.NewAuthInterceptor(tokensManager)
+	validationInterceptor := interceptors.NewValidationInterceptor(logger)
+
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			authInterceptor.Unary(),
+			validationInterceptor.Unary(),
+		),
+	)
 
 	userPb.RegisterUserServiceServer(grpcServer, userGrpc.NewImplementation(logger, userService))
-	taskPb.RegisterTaskServiceServer(grpcServer, taskGrpc.NewImplementation(logger))
+	taskPb.RegisterTaskServiceServer(grpcServer, taskGrpc.NewImplementation(logger, taskService))
 	reflection.Register(grpcServer)
 
 	grpcServer.Serve(conn)

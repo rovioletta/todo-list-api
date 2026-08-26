@@ -13,11 +13,6 @@ import (
 )
 
 func (i *Implementation) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	if err := i.v.Validate(req); err != nil {
-		i.logger.Debug("i.v.Validate", slog.String("error", err.Error()))
-		return nil, status.Errorf(codes.InvalidArgument, "validation error")
-	}
-
 	userID, err := i.userService.CreateUser(ctx, req.GetLogin(), req.GetPassword())
 	if err != nil {
 		i.logger.Debug("i.userService.CreateUser", slog.String("error", err.Error()))

@@ -13,11 +13,6 @@ import (
 )
 
 func (i *Implementation) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
-	if err := i.v.Validate(req); err != nil {
-		i.logger.Debug("i.v.Validate", slog.String("error", err.Error()))
-		return nil, status.Errorf(codes.InvalidArgument, "validation error")
-	}
-
 	token, err := i.userService.Login(ctx, req.GetLogin(), req.GetPassword())
 	if err != nil {
 		i.logger.Debug("i.userService.Login", slog.String("error", err.Error()))

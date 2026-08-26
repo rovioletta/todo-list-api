@@ -6,6 +6,7 @@ import (
 	pb "rovioletta/todo-list-api/pkg/pb/task"
 )
 
-func (i *Implementation) CreateTask(context.Context, *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
+func (i *Implementation) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
+
 	return nil, nil
 }
