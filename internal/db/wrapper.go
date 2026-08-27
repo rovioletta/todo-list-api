@@ -54,5 +54,9 @@ func handleError(err error) error {
 		}
 	}
 
+	if err == pgx.ErrNoRows {
+		return apperrors.ErrNotFound
+	}
+
 	return err
 }

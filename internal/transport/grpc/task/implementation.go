@@ -1,12 +1,15 @@
 package task
 
 import (
+	"context"
 	"log/slog"
 
+	"rovioletta/todo-list-api/internal/service/task"
 	pb "rovioletta/todo-list-api/pkg/pb/task"
 )
 
 type taskService interface {
+	CreateTask(ctx context.Context, newTask task.Task) (taskID uint64, err error)
 }
 
 type Implementation struct {
