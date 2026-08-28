@@ -13,8 +13,8 @@ import (
 
 func (i *Implementation) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskResponse, error) {
 	taskID, err := i.taskService.CreateTask(ctx, task.Task{
-		Title:       req.Title,
-		Description: req.Description,
+		Title:       &req.Title,
+		Description: &req.Description,
 	})
 
 	if err != nil {

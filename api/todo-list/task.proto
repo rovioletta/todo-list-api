@@ -5,9 +5,13 @@ package task;
 option go_package = "github.com/rovioletta/todo-list/pkg/pb/task;task";
 
 import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (google.protobuf.Empty);
+  rpc GetTaskByID(GetTaskByIDRequest) returns (GetTaskByIDResponse);
 }
 
 message CreateTaskRequest {
@@ -22,4 +26,38 @@ message CreateTaskRequest {
 
 message CreateTaskResponse {
   uint64 task_id = 1;
+}
+
+enum TaskStatus {
+  TASK_STATUS_UNKNOWN = 0;
+  TASK_STATUS_BACKLOG = 1;
+  TASK_STATUS_TODO = 2;
+  TASK_STATUS_IN_PROGRESS = 3;
+  TASK_STATUS_IN_REVIEW = 4;
+  TASK_STATUS_DONE = 5;
+  TASK_STATUS_CANCELED = 6;
+}
+message UpdateTaskRequest {
+  uint64 task_id = 1;
+  optional string title = 2 [(buf.validate.field).string = {
+    min_len: 5,
+    max_len: 32
+  }];
+  optional string description = 3 [(buf.validate.field).string = {
+    min_len: 1,
+  }];
+
+  optional TaskStatus status = 4;
+}
+
+message GetTaskByIDRequest {
+  uint64 task_id = 1;
+}
+
+message GetTaskByIDResponse {
+  uint64 id = 1;
+  string title = 2;
+  string description = 3;
+  TaskStatus status = 4;
+  google.protobuf.Timestamp created_at = 5;
 }

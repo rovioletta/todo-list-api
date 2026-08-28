@@ -9,18 +9,11 @@ import (
 	"rovioletta/todo-list-api/internal/apperrors"
 )
 
-type queriesInterface interface {
-	CreateUser(ctx context.Context, login string, passwordHash string) (uint64, error)
-	GetUserByLogin(ctx context.Context, login string) (GetUserByLoginRow, error)
-	CreateTask(ctx context.Context, arg *CreateTaskParams) (uint64, error)
-	WithTx(tx pgx.Tx) *Queries
-}
-
 type errorHandler struct {
-	queries queriesInterface
+	queries *Queries
 }
 
-func NewErrorHandler(queries queriesInterface) *errorHandler {
+func NewErrorHandler(queries *Queries) *errorHandler {
 	return &errorHandler{queries: queries}
 }
 
@@ -36,6 +29,11 @@ func (w *errorHandler) GetUserByLogin(ctx context.Context, login string) (GetUse
 
 func (w *errorHandler) CreateTask(ctx context.Context, arg *CreateTaskParams) (uint64, error) {
 	res, err := w.queries.CreateTask(ctx, arg)
+	return res, handleError(err)
+}
+
+func (w *errorHandler) UpdateTask(ctx context.Context, arg *UpdateTaskParams) (uint64, error) {
+	res, err := w.queries.UpdateTask(ctx, arg)
 	return res, handleError(err)
 }
 

@@ -21,7 +21,7 @@ func (i *Implementation) Login(ctx context.Context, req *pb.LoginRequest) (*pb.L
 			return nil, status.Errorf(codes.PermissionDenied, "wrong password")
 		}
 
-		if errors.Is(err,apperrors.ErrNotFound) {
+		if errors.Is(err, apperrors.ErrNotFound) {
 			return nil, status.Errorf(codes.NotFound, "user doesn't exist")
 		}
 

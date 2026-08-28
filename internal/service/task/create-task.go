@@ -9,8 +9,8 @@ import (
 
 func (s *Service) CreateTask(ctx context.Context, newTask Task) (taskID uint64, err error) {
 	taskID, err = s.queries.CreateTask(ctx, &db.CreateTaskParams{
-		Title:       newTask.Title,
-		Description: newTask.Description,
+		Title:       *newTask.Title,
+		Description: *newTask.Description,
 		Status:      db.TaskStatusTodo,
 	})
 	if err != nil {

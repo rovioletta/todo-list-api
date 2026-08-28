@@ -8,6 +8,7 @@ import (
 
 type queries interface {
 	CreateTask(ctx context.Context, arg *db.CreateTaskParams) (uint64, error)
+	UpdateTask(ctx context.Context, arg *db.UpdateTaskParams) (uint64, error)
 }
 
 type Service struct {

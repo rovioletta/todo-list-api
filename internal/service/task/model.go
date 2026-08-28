@@ -15,8 +15,8 @@ const (
 
 type Task struct {
 	ID          uint64
-	Title       string
-	Description string
-	Status      TaskStatus
+	Title       *string
+	Description *string
+	Status      *TaskStatus
 	CreatedAt   time.Time
 }
