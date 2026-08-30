@@ -37,6 +37,11 @@ func (w *errorHandler) UpdateTask(ctx context.Context, arg *UpdateTaskParams) (u
 	return res, handleError(err)
 }
 
+func (w *errorHandler) GetTaskByID(ctx context.Context, id uint64) (Task, error) {
+	res, err := w.queries.GetTaskByID(ctx, id)
+	return res, handleError(err)
+}
+
 func (w *errorHandler) WithTx(tx pgx.Tx) *Queries {
 	return w.queries.WithTx(tx)
 }

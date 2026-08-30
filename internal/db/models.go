@@ -61,12 +61,12 @@ type Task struct {
 	Title       string
 	Description string
 	Status      TaskStatus
-	CreatedAt   *time.Time
+	CreatedAt   time.Time
 }
 
 type User struct {
 	ID           uint64
 	Login        string
 	PasswordHash string
-	CreatedAt    *time.Time
+	CreatedAt    time.Time
 }

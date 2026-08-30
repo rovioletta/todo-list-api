@@ -11,6 +11,7 @@ import (
 type taskService interface {
 	CreateTask(ctx context.Context, newTask task.Task) (taskID uint64, err error)
 	UpdateTask(ctx context.Context, updatedTask task.Task) (err error)
+	GetTaskByID(ctx context.Context, taskID uint64) (task *task.Task, err error)
 }
 
 type Implementation struct {
