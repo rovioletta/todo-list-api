@@ -369,6 +369,50 @@ func (x *GetTaskByIDResponse) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type DeleteTaskRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TaskId        uint64                 `protobuf:"varint,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteTaskRequest) Reset() {
+	*x = DeleteTaskRequest{}
+	mi := &file_task_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTaskRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTaskRequest) ProtoMessage() {}
+
+func (x *DeleteTaskRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_task_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTaskRequest.ProtoReflect.Descriptor instead.
+func (*DeleteTaskRequest) Descriptor() ([]byte, []int) {
+	return file_task_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteTaskRequest) GetTaskId() uint64 {
+	if x != nil {
+		return x.TaskId
+	}
+	return 0
+}
+
 var File_task_proto protoreflect.FileDescriptor
 
 const file_task_proto_rawDesc = "" +
@@ -396,7 +440,9 @@ const file_task_proto_rawDesc = "" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12(\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x10.task.TaskStatusR\x06status\x129\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt*\xbc\x01\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\",\n" +
+	"\x11DeleteTaskRequest\x12\x17\n" +
+	"\atask_id\x18\x01 \x01(\x04R\x06taskId*\xbc\x01\n" +
 	"\n" +
 	"TaskStatus\x12\x17\n" +
 	"\x13TASK_STATUS_UNKNOWN\x10\x00\x12\x17\n" +
@@ -405,13 +451,15 @@ const file_task_proto_rawDesc = "" +
 	"\x17TASK_STATUS_IN_PROGRESS\x10\x03\x12\x19\n" +
 	"\x15TASK_STATUS_IN_REVIEW\x10\x04\x12\x14\n" +
 	"\x10TASK_STATUS_DONE\x10\x05\x12\x18\n" +
-	"\x14TASK_STATUS_CANCELED\x10\x062\xd1\x01\n" +
+	"\x14TASK_STATUS_CANCELED\x10\x062\x90\x02\n" +
 	"\vTaskService\x12?\n" +
 	"\n" +
 	"CreateTask\x12\x17.task.CreateTaskRequest\x1a\x18.task.CreateTaskResponse\x12=\n" +
 	"\n" +
 	"UpdateTask\x12\x17.task.UpdateTaskRequest\x1a\x16.google.protobuf.Empty\x12B\n" +
-	"\vGetTaskByID\x12\x18.task.GetTaskByIDRequest\x1a\x19.task.GetTaskByIDResponseB2Z0github.com/rovioletta/todo-list/pkg/pb/task;taskb\x06proto3"
+	"\vGetTaskByID\x12\x18.task.GetTaskByIDRequest\x1a\x19.task.GetTaskByIDResponse\x12=\n" +
+	"\n" +
+	"DeleteTask\x12\x17.task.DeleteTaskRequest\x1a\x16.google.protobuf.EmptyB2Z0github.com/rovioletta/todo-list/pkg/pb/task;taskb\x06proto3"
 
 var (
 	file_task_proto_rawDescOnce sync.Once
@@ -426,7 +474,7 @@ func file_task_proto_rawDescGZIP() []byte {
 }
 
 var file_task_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_task_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_task_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_task_proto_goTypes = []any{
 	(TaskStatus)(0),               // 0: task.TaskStatus
 	(*CreateTaskRequest)(nil),     // 1: task.CreateTaskRequest
@@ -434,21 +482,24 @@ var file_task_proto_goTypes = []any{
 	(*UpdateTaskRequest)(nil),     // 3: task.UpdateTaskRequest
 	(*GetTaskByIDRequest)(nil),    // 4: task.GetTaskByIDRequest
 	(*GetTaskByIDResponse)(nil),   // 5: task.GetTaskByIDResponse
-	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),         // 7: google.protobuf.Empty
+	(*DeleteTaskRequest)(nil),     // 6: task.DeleteTaskRequest
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 8: google.protobuf.Empty
 }
 var file_task_proto_depIdxs = []int32{
 	0, // 0: task.UpdateTaskRequest.status:type_name -> task.TaskStatus
 	0, // 1: task.GetTaskByIDResponse.status:type_name -> task.TaskStatus
-	6, // 2: task.GetTaskByIDResponse.created_at:type_name -> google.protobuf.Timestamp
+	7, // 2: task.GetTaskByIDResponse.created_at:type_name -> google.protobuf.Timestamp
 	1, // 3: task.TaskService.CreateTask:input_type -> task.CreateTaskRequest
 	3, // 4: task.TaskService.UpdateTask:input_type -> task.UpdateTaskRequest
 	4, // 5: task.TaskService.GetTaskByID:input_type -> task.GetTaskByIDRequest
-	2, // 6: task.TaskService.CreateTask:output_type -> task.CreateTaskResponse
-	7, // 7: task.TaskService.UpdateTask:output_type -> google.protobuf.Empty
-	5, // 8: task.TaskService.GetTaskByID:output_type -> task.GetTaskByIDResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
+	6, // 6: task.TaskService.DeleteTask:input_type -> task.DeleteTaskRequest
+	2, // 7: task.TaskService.CreateTask:output_type -> task.CreateTaskResponse
+	8, // 8: task.TaskService.UpdateTask:output_type -> google.protobuf.Empty
+	5, // 9: task.TaskService.GetTaskByID:output_type -> task.GetTaskByIDResponse
+	8, // 10: task.TaskService.DeleteTask:output_type -> google.protobuf.Empty
+	7, // [7:11] is the sub-list for method output_type
+	3, // [3:7] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -466,7 +517,7 @@ func file_task_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_task_proto_rawDesc), len(file_task_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -12,6 +12,7 @@ service TaskService {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
   rpc UpdateTask(UpdateTaskRequest) returns (google.protobuf.Empty);
   rpc GetTaskByID(GetTaskByIDRequest) returns (GetTaskByIDResponse);
+  rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty);
 }
 
 message CreateTaskRequest {
@@ -60,4 +61,8 @@ message GetTaskByIDResponse {
   string description = 3;
   TaskStatus status = 4;
   google.protobuf.Timestamp created_at = 5;
+}
+
+message DeleteTaskRequest {
+  uint64 task_id = 1;
 }

@@ -42,6 +42,11 @@ func (w *errorHandler) GetTaskByID(ctx context.Context, id uint64) (Task, error)
 	return res, handleError(err)
 }
 
+func (w *errorHandler) DeleteTask(ctx context.Context, id uint64) (uint64, error) {
+	res, err := w.queries.DeleteTask(ctx, id)
+	return res, handleError(err)
+}
+
 func (w *errorHandler) WithTx(tx pgx.Tx) *Queries {
 	return w.queries.WithTx(tx)
 }
