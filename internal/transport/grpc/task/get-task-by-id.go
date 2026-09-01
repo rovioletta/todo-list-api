@@ -25,13 +25,20 @@ func (i *Implementation) GetTaskByID(ctx context.Context, req *pb.GetTaskByIDReq
 
 		return nil, status.Errorf(codes.Internal, "internal server error")
 	}
+
 	return &pb.GetTaskByIDResponse{
+		Task: repackTaskToPb(task),
+	}, nil
+}
+
+func repackTaskToPb(task *task.Task) *pb.Task {
+	return &pb.Task{
 		Id:          task.ID,
 		Title:       *task.Title,
 		Description: *task.Description,
 		Status:      repackTaskStatusToPb(task.Status),
 		CreatedAt:   timestamppb.New(task.CreatedAt),
-	}, nil
+	}
 }
 
 func repackTaskStatusToPb(status *task.TaskStatus) pb.TaskStatus {

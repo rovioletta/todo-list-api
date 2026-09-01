@@ -47,6 +47,11 @@ func (w *errorHandler) DeleteTask(ctx context.Context, id uint64) (uint64, error
 	return res, handleError(err)
 }
 
+func (w *errorHandler) GetTasksByFilter(ctx context.Context, arg *GetTasksByFilterParams) ([]Task, error) {
+	res, err := w.queries.GetTasksByFilter(ctx, arg)
+	return res, handleError(err)
+}
+
 func (w *errorHandler) WithTx(tx pgx.Tx) *Queries {
 	return w.queries.WithTx(tx)
 }

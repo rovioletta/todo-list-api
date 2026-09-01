@@ -11,6 +11,7 @@ type queries interface {
 	UpdateTask(ctx context.Context, arg *db.UpdateTaskParams) (uint64, error)
 	GetTaskByID(ctx context.Context, id uint64) (db.Task, error)
 	DeleteTask(ctx context.Context, id uint64) (uint64, error)
+	GetTasksByFilter(ctx context.Context, arg *db.GetTasksByFilterParams) ([]db.Task, error)
 }
 
 type Service struct {

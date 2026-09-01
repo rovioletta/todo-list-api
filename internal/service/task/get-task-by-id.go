@@ -18,7 +18,7 @@ func (s *Service) GetTaskByID(ctx context.Context, taskID uint64) (task *Task, e
 		Title:       &row.Title,
 		Description: &row.Description,
 		Status:      repackStatus(row.Status),
-		CreatedAt:   row.CreatedAt,
+		CreatedAt:   *row.CreatedAt,
 	}, err
 }
 

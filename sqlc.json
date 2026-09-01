@@ -28,7 +28,8 @@
               "nullable": true,
               "go_type": {
                 "import": "time",
-                "type": "Time"
+                "type": "Time",
+                "pointer": true
               }
             },
             {
@@ -43,7 +44,8 @@
               "nullable": true,
               "go_type": {
                 "import": "time",
-                "type": "Time"
+                "type": "Time",
+                "pointer": true
               }
             },
             {
@@ -58,7 +60,8 @@
               "nullable": true,
               "go_type": {
                 "import": "time",
-                "type": "Time"
+                "type": "Time",
+                "pointer": true
               }
             },
             {
@@ -73,7 +76,8 @@
               "nullable": true,
               "go_type": {
                 "import": "time",
-                "type": "Time"
+                "type": "Time",
+                "pointer": true
               }
             },
             {

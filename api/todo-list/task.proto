@@ -13,6 +13,7 @@ service TaskService {
   rpc UpdateTask(UpdateTaskRequest) returns (google.protobuf.Empty);
   rpc GetTaskByID(GetTaskByIDRequest) returns (GetTaskByIDResponse);
   rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty);
+  rpc GetTasksByFilter(GetTasksByFilterRequest) returns (GetTasksByFilterResponse);
 }
 
 message CreateTaskRequest {
@@ -38,6 +39,7 @@ enum TaskStatus {
   TASK_STATUS_DONE = 5;
   TASK_STATUS_CANCELED = 6;
 }
+
 message UpdateTaskRequest {
   uint64 task_id = 1;
   optional string title = 2 [(buf.validate.field).string = {
@@ -55,7 +57,7 @@ message GetTaskByIDRequest {
   uint64 task_id = 1;
 }
 
-message GetTaskByIDResponse {
+message Task {
   uint64 id = 1;
   string title = 2;
   string description = 3;
@@ -63,6 +65,41 @@ message GetTaskByIDResponse {
   google.protobuf.Timestamp created_at = 5;
 }
 
+message GetTaskByIDResponse {
+  Task task = 1;
+}
+
 message DeleteTaskRequest {
   uint64 task_id = 1;
+}
+
+message Filter {
+  optional string search_title = 1;
+  optional TaskStatus search_status = 2;
+  optional google.protobuf.Timestamp created_from = 3;
+  optional google.protobuf.Timestamp created_to = 4;
+}
+
+message Sort {
+  optional string field = 1 [(buf.validate.field).string = {
+    in: ["title", "status", "created_at"]
+  }]; ;
+  optional string order = 2 [(buf.validate.field).string = {
+    in: ["asc", "desc"]
+  }]; ;
+}
+
+message Pagination {
+  uint64 limit = 1;
+  uint64 offset = 2;
+}
+
+message GetTasksByFilterRequest {
+  optional Filter filter = 1;
+  optional Sort sort = 2;
+  optional Pagination pagination = 3;
+}
+
+message GetTasksByFilterResponse {
+  repeated Task tasks = 1;
 }

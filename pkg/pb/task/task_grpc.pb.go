@@ -20,10 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TaskService_CreateTask_FullMethodName  = "/task.TaskService/CreateTask"
-	TaskService_UpdateTask_FullMethodName  = "/task.TaskService/UpdateTask"
-	TaskService_GetTaskByID_FullMethodName = "/task.TaskService/GetTaskByID"
-	TaskService_DeleteTask_FullMethodName  = "/task.TaskService/DeleteTask"
+	TaskService_CreateTask_FullMethodName       = "/task.TaskService/CreateTask"
+	TaskService_UpdateTask_FullMethodName       = "/task.TaskService/UpdateTask"
+	TaskService_GetTaskByID_FullMethodName      = "/task.TaskService/GetTaskByID"
+	TaskService_DeleteTask_FullMethodName       = "/task.TaskService/DeleteTask"
+	TaskService_GetTasksByFilter_FullMethodName = "/task.TaskService/GetTasksByFilter"
 )
 
 // TaskServiceClient is the client API for TaskService service.
@@ -34,6 +35,7 @@ type TaskServiceClient interface {
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetTaskByID(ctx context.Context, in *GetTaskByIDRequest, opts ...grpc.CallOption) (*GetTaskByIDResponse, error)
 	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetTasksByFilter(ctx context.Context, in *GetTasksByFilterRequest, opts ...grpc.CallOption) (*GetTasksByFilterResponse, error)
 }
 
 type taskServiceClient struct {
@@ -84,6 +86,16 @@ func (c *taskServiceClient) DeleteTask(ctx context.Context, in *DeleteTaskReques
 	return out, nil
 }
 
+func (c *taskServiceClient) GetTasksByFilter(ctx context.Context, in *GetTasksByFilterRequest, opts ...grpc.CallOption) (*GetTasksByFilterResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetTasksByFilterResponse)
+	err := c.cc.Invoke(ctx, TaskService_GetTasksByFilter_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility.
@@ -92,6 +104,7 @@ type TaskServiceServer interface {
 	UpdateTask(context.Context, *UpdateTaskRequest) (*emptypb.Empty, error)
 	GetTaskByID(context.Context, *GetTaskByIDRequest) (*GetTaskByIDResponse, error)
 	DeleteTask(context.Context, *DeleteTaskRequest) (*emptypb.Empty, error)
+	GetTasksByFilter(context.Context, *GetTasksByFilterRequest) (*GetTasksByFilterResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -113,6 +126,9 @@ func (UnimplementedTaskServiceServer) GetTaskByID(context.Context, *GetTaskByIDR
 }
 func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedTaskServiceServer) GetTasksByFilter(context.Context, *GetTasksByFilterRequest) (*GetTasksByFilterResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTasksByFilter not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 func (UnimplementedTaskServiceServer) testEmbeddedByValue()                     {}
@@ -207,6 +223,24 @@ func _TaskService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_GetTasksByFilter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTasksByFilterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).GetTasksByFilter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_GetTasksByFilter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).GetTasksByFilter(ctx, req.(*GetTasksByFilterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -229,6 +263,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteTask",
 			Handler:    _TaskService_DeleteTask_Handler,
+		},
+		{
+			MethodName: "GetTasksByFilter",
+			Handler:    _TaskService_GetTasksByFilter_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

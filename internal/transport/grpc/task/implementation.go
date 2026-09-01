@@ -13,6 +13,7 @@ type taskService interface {
 	UpdateTask(ctx context.Context, updatedTask task.Task) (err error)
 	GetTaskByID(ctx context.Context, taskID uint64) (task *task.Task, err error)
 	DeleteTask(ctx context.Context, taskID uint64) (err error)
+	GetTasksByFilter(ctx context.Context, filter *task.TaskFilter) ([]task.Task, error)
 }
 
 type Implementation struct {
